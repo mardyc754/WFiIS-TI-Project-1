@@ -50,6 +50,7 @@ function drawFloor(ctx, numOfFloor){
 
 }*/
 
+
 function drawTree(){
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
@@ -58,23 +59,29 @@ function drawTree(){
 
     ctx.strokeStyle = "black";
     
-    for(let i=1; i<=6; i++){
+    /*for(let i=1; i<=6; i++){
         drawFloor(ctx, i);
-    }
+    }*/
+    bst.preorderDraw(bst.root, ctx, 0, 1);
 }
 
 function addNode(){
     const key = Number(document.getElementById("form-key").value);
-    //bst.insert(key);
+    bst.insert(key);
+    document.getElementById("bst-height").innerHTML = bst.height();
+    document.getElementById("number-of-nodes").innerHTML = bst.numOfNodes;
     drawTree();
 }
 
 function removeNode(){
     //bst.insert(key);
+
+    document.getElementById("bst-height").innerHTML = bst.height();
+    document.getElementById("number-of-nodes").innerHTML = bst.numOfNodes;
     drawTree();
 }
 
 window.onload = (event) => { 
     changeContent(event, 'simulation');
-    //drawTree(); 
+    drawTree();
 }

@@ -10,6 +10,7 @@ class Node{
 class Tree{
     constructor(){
         this.root = null;
+        this.numOfNodes = 0;
         //this.height = 0;
     }
 
@@ -26,6 +27,7 @@ class Tree{
         if(y == null){ this.root = z; }
         else if(key < y.key){ y.left = z; }
         else { y.right = z; }
+        this.numOfNodes++;
     }
 
     minNode(node){
@@ -133,6 +135,81 @@ class Tree{
             if(y != node){
                 node.key = y.key;
             }
+        }
+        this.numOfNodes--;
+    }
+
+    height(node){
+        if (node == null)
+            return -1;
+        else
+        {
+            /* compute the depth of each subtree */
+            let leftHeight = height(node.left);
+            let rightHeight = height(node.right);
+        
+            /* use the larger one */
+            if (leftHeight > rightHeight)
+                return(leftHeight + 1);
+            else return(rightHeight + 1);
+        }
+    }
+
+    findDepth(root, key)
+    {   
+        if (this.root == null)
+            return -1;
+    
+        let dist = -1;
+    
+        if ((root.key == key)||
+            (dist = findDepth(root.left, key)) >= 0 ||
+            (dist = findDepth(root.right, key)) >= 0)
+            return dist + 1;
+            
+        return dist;
+    }
+
+    preorderDraw(node, ctx, depth, i){
+        if(node != null){
+            let nodeRadius = depth == 0 ? 50 : 90/(depth+1);
+            let maxNumOfNodes = 2**depth;
+            
+            ctx.font = nodeRadius + "px Arial";
+            if(node.key / 100 >= 1){
+                ctx.fillText(node.key, i*canvas.width/(maxNumOfNodes+1)-3*nodeRadius/4, 70+depth*150+nodeRadius/3);
+            } // dla liczb 2-cyfrowych
+            else if(node.key / 10 >= 1){ 
+                ctx.fillText(node.key, i*canvas.width/(maxNumOfNodes+1)-nodeRadius/2, 70+depth*150+nodeRadius/3);
+            } // dla cyfr
+            else{
+             ctx.fillText(node.key, i*canvas.width/(maxNumOfNodes+1)-nodeRadius/3, 70+depth*150+nodeRadius/3);   
+            }
+
+            console.log(depth);
+            ctx.beginPath();
+            ctx.arc(i*canvas.width/(maxNumOfNodes+1), 70+depth*150, nodeRadius, 0, Math.PI*2, true);
+            ctx.stroke();
+
+            if(node.parent != null){
+                let oldNodeRadius = depth-1 == 0 ? 50 : 90/depth;
+                let oldMaxNumOfNodes = maxNumOfNodes/2;
+                ctx.beginPath();
+                if(node == node.parent.left){
+                    ctx.beginPath();
+                    ctx.moveTo(i*canvas.width/(maxNumOfNodes+1), 70+depth*150-nodeRadius);
+                    ctx.lineTo((i+1)/2*canvas.width/(oldMaxNumOfNodes+1)-oldNodeRadius/Math.sqrt(2), 70+(depth-1)*150+oldNodeRadius/Math.sqrt(2));
+                }
+                else{
+                    ctx.moveTo(i*canvas.width/(maxNumOfNodes+1), 70+depth*150-nodeRadius);
+                    ctx.lineTo(i/2*canvas.width/(oldMaxNumOfNodes+1)+oldNodeRadius/Math.sqrt(2), 70+(depth-1)*150+oldNodeRadius/Math.sqrt(2));
+                }
+                ctx.stroke();
+            }
+            
+            console.log(node.key);
+            this.preorderDraw(node.left, ctx, depth+1, 2*i-1);
+            this.preorderDraw(node.right, ctx, depth+1, 2*i);
         }
     }
 }
