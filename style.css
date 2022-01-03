@@ -22,7 +22,7 @@ header{
     border-bottom: 2px solid black;
 }
 
-header h1, footer p{
+header > h1, footer > p{
     color: white;
     text-shadow: 2px 3px 2px grey;
 }
@@ -34,7 +34,7 @@ nav{
     z-index: 2;
 }
 
-nav ul{
+nav > ul{
     list-style-type: none;
     position: sticky;
     left: 0;
@@ -61,18 +61,12 @@ nav ul{
 
 .flex {
     display: flex;
-    flex-wrap: nowrap;
+    flex-direction: row;
     margin-top: 0;
     min-height: 80vh;
 }  
 
-.flex::after{
-    content: "";
-    clear: both;
-    display: table;
-}
-
-.main-content{
+main{
     width: 80%;
     padding: 3em;
 }
@@ -90,6 +84,70 @@ article:active{
     height: auto;
 }
 
+figure{
+    width: 100%;
+    text-align: center;
+    margin: 4em 0;
+}
+
+#bst-example{
+    max-width: 500px;
+    width: 100%;
+}
+
+#bst-elements{
+    max-width: 900px;
+    width: 100%;
+}
+
+.bst-gif{
+    max-width: 300px;
+    width: 100%;
+}
+
+.bst-delete{
+    max-width: 600px;
+    width: 100%;
+}
+
+.code{
+    background-color: #2e2e2e;
+    color: lime;
+    border-radius: 2rem;
+    padding: 2em 0.5em;
+    font-size: large;
+}
+
+.simulation-area{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    /*height: 600px;*/
+}
+
+.tree-area{
+    background-color: #bbb;
+    flex: 4;
+}
+
+.form-area{
+    flex: 1;
+    background-color: #aaa;
+}
+
 footer{
     border-top: 2px solid black;
+}
+
+.tree-area{
+    padding: 0.5em;
+}
+
+canvas{
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    /*max-width: 600px;
+    max-height: 600px;*/
+    background-color: white;
 }
