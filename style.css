@@ -151,3 +151,7 @@ canvas{
     max-height: 600px;*/
     background-color: white;
 }
+
+#removal-info{
+    color: red;
+}

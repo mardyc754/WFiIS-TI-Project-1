@@ -47,14 +47,12 @@ class Tree{
     inorder(node){
         if(node != null){
             this.inorder(node.left);
-            console.log(node.key);
             this.inorder(node.right);
         }
     }
 
     preorder(node){
         if(node != null){
-            console.log(node.key);
             this.preorder(node.left);
             this.preorder(node.right);
         }
@@ -64,7 +62,6 @@ class Tree{
         if(node != null){
             this.postorder(node.left);
             this.postorder(node.right);
-            console.log(node.key);
         }
     }
 
@@ -170,47 +167,8 @@ class Tree{
         return dist;
     }
 
-    preorderDraw(node, ctx, depth, i){
-        if(node != null){
-            let nodeRadius = depth == 0 ? 50 : 90/(depth+1);
-            let maxNumOfNodes = 2**depth;
-            
-            ctx.font = nodeRadius + "px Arial";
-            if(node.key / 100 >= 1){
-                ctx.fillText(node.key, i*canvas.width/(maxNumOfNodes+1)-3*nodeRadius/4, 70+depth*150+nodeRadius/3);
-            } // dla liczb 2-cyfrowych
-            else if(node.key / 10 >= 1){ 
-                ctx.fillText(node.key, i*canvas.width/(maxNumOfNodes+1)-nodeRadius/2, 70+depth*150+nodeRadius/3);
-            } // dla cyfr
-            else{
-             ctx.fillText(node.key, i*canvas.width/(maxNumOfNodes+1)-nodeRadius/3, 70+depth*150+nodeRadius/3);   
-            }
-
-            console.log(depth);
-            ctx.beginPath();
-            ctx.arc(i*canvas.width/(maxNumOfNodes+1), 70+depth*150, nodeRadius, 0, Math.PI*2, true);
-            ctx.stroke();
-
-            if(node.parent != null){
-                let oldNodeRadius = depth-1 == 0 ? 50 : 90/depth;
-                let oldMaxNumOfNodes = maxNumOfNodes/2;
-                ctx.beginPath();
-                if(node == node.parent.left){
-                    ctx.beginPath();
-                    ctx.moveTo(i*canvas.width/(maxNumOfNodes+1), 70+depth*150-nodeRadius);
-                    ctx.lineTo((i+1)/2*canvas.width/(oldMaxNumOfNodes+1)-oldNodeRadius/Math.sqrt(2), 70+(depth-1)*150+oldNodeRadius/Math.sqrt(2));
-                }
-                else{
-                    ctx.moveTo(i*canvas.width/(maxNumOfNodes+1), 70+depth*150-nodeRadius);
-                    ctx.lineTo(i/2*canvas.width/(oldMaxNumOfNodes+1)+oldNodeRadius/Math.sqrt(2), 70+(depth-1)*150+oldNodeRadius/Math.sqrt(2));
-                }
-                ctx.stroke();
-            }
-            
-            console.log(node.key);
-            this.preorderDraw(node.left, ctx, depth+1, 2*i-1);
-            this.preorderDraw(node.right, ctx, depth+1, 2*i);
-        }
+    clear(){
+        this.root = null;
     }
 }
 

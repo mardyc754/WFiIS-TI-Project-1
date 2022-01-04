@@ -4,6 +4,7 @@
         <link rel=stylesheet href="style.css">
         <link rel="icon" href="favicon.ico">
         <script src="bst.js"></script>
+        <script src="drawablebst.js"></script>
         <script src="main.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8" />
@@ -214,15 +215,17 @@
                     <div class="tree-area">
                         <canvas id="canvas" width="1000" height="1000"></canvas>
                     </div>
-                    <div class="form-area">
+                    <div class="form-area" id="normal-content">
                     <form name="add-node" >
                         <label for="key">Podaj wartość:</label>
                         <input type="number" name="key" id="form-key" value="30"/>
-                        <input type="button" onclick="addNode()" value="Dodaj węzeł" />
-                    </form>    
+                        <input type="button" id="insert-node" onclick="addNode(false)" value="Dodaj węzeł" />
+                    </form>
+                        <input type="button" id="insert-random-node" value="Dodaj losowy węzeł" />    
                         <p>Liczba węzłów: <span id="number-of-nodes"></span></p>
                         <p>Wysokość drzewa: <span id="bst-height"></span></p>
-                        <input type="button" onclick="removeNode()" value="Usuń węzeł..." /><br/>
+                        <input type="button" id="node-remove" value="Usuń węzeł..." /><br/>
+                        <p id="removal-info"></p>
                     <form name="tree-walk">
                         <label for="traversal">Przejście:</label>
                         <select name="traversal" id="traversal-select">
@@ -232,7 +235,11 @@
                         </select>
                         <button>Przejdź po drzewie</button>
                     </form>
-                        <button>Wygeneruj drzewo</button>
+                        <button id="clear-tree">Wyczyść drzewo</button>
+                    </div>
+                    <div class="form-area" id="remove-content" style="display: none">
+                        <p id="remove-info">Wybierz węzeł do usunięcia:</p>
+                        <input type="button" id="cancel-remove" value="Anuluj" /> 
                     </div>
                 </div>
                 
@@ -253,6 +260,6 @@
         <footer>
             <p>&copy; 2021 Marta Dychała</p>
         </footer>
-        
+
     </body>
 </html>

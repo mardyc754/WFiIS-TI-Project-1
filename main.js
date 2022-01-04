@@ -13,75 +13,54 @@ function changeContent(event, section){
         links[i].className = links[i].className.replace(" active", "");
     }
 
-    //document.getElementById(section).style.display = "block";
     document.getElementById(section).style.opacity = 1;
     document.getElementById(section).style.height = "auto";
     event.currentTarget.className += " active";
 }
 
-let bst = new Tree();
-
-function drawFloor(ctx, numOfFloor){
-    let numOfNodes = 2**(numOfFloor-1);
-    let nodeRadius = numOfFloor == 1 ? 50 : 90/numOfFloor;
-    ctx.font = nodeRadius + "px Arial";
-    for(let i=1; i<=numOfNodes; i++){
-        
-        //Wypisywanie wartości klucza
-        // dla liczb 3-cyfrowych
-        if(i / 100 >= 1){
-            ctx.fillText(i, i*canvas.width/(numOfNodes+1)-3*nodeRadius/4, 70+(numOfFloor-1)*150+nodeRadius/3);
-        } // dla liczb 2-cyfrowych
-        else if(i / 10 >= 1){ 
-            ctx.fillText(i, i*canvas.width/(numOfNodes+1)-nodeRadius/2, 70+(numOfFloor-1)*150+nodeRadius/3);
-        } // dla cyfr
-        else{
-         ctx.fillText(i, i*canvas.width/(numOfNodes+1)-nodeRadius/3, 70+(numOfFloor-1)*150+nodeRadius/3);   
-        }
-
-        // rysowanie węzła
-        ctx.beginPath();
-        ctx.arc(i*canvas.width/(numOfNodes+1), 70+(numOfFloor-1)*150, nodeRadius, 0, Math.PI*2, true);
-        ctx.stroke();
-    }
-}
-
-/*function drawEdges(ctx, numOfFloor){
-
-}*/
-
-
-function drawTree(){
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
-    console.log("width=" + canvas.width + ", height=" + canvas.height);
-    ctx.clearRect(0,0,canvas.width, canvas.height);
-
-    ctx.strokeStyle = "black";
-    
-    /*for(let i=1; i<=6; i++){
-        drawFloor(ctx, i);
-    }*/
-    bst.preorderDraw(bst.root, ctx, 0, 1);
-}
-
-function addNode(){
-    const key = Number(document.getElementById("form-key").value);
-    bst.insert(key);
-    document.getElementById("bst-height").innerHTML = bst.height();
-    document.getElementById("number-of-nodes").innerHTML = bst.numOfNodes;
-    drawTree();
-}
-
-function removeNode(){
-    //bst.insert(key);
-
-    document.getElementById("bst-height").innerHTML = bst.height();
-    document.getElementById("number-of-nodes").innerHTML = bst.numOfNodes;
-    drawTree();
-}
 
 window.onload = (event) => { 
     changeContent(event, 'simulation');
-    drawTree();
+
+    const canvas = document.getElementById("canvas");
+    let bst = new DrawableBST(canvas);
+    
+    bst.drawTree();
+    
+    //const ctx = canvas.getContext("2d");
+    //ctx.clearRect(0,0,canvas.width, canvas.height);
+
+    let makeHowerable =  (e) => {
+        bst.howerableTree(bst.root, 0, 1, e);
+    };
+
+    document.getElementById("node-remove").onclick = () =>{
+        if(bst.root != null){
+            document.getElementById("normal-content").style.display = "none";
+            document.getElementById("remove-content").style.display = "block";
+            canvas.addEventListener("mousemove",  makeHowerable);
+            document.getElementById("removal-info").innerHTML = ""
+        }
+        else{
+            document.getElementById("removal-info").innerHTML = "Drzewo jest puste";
+        }
+    }
+
+    document.getElementById("cancel-remove").onclick = () =>{
+        document.getElementById("normal-content").style.display = "block";
+        document.getElementById("remove-content").style.display = "none";
+        canvas.removeEventListener("mousemove", makeHowerable);
+    }
+
+    document.getElementById("insert-node").onclick = () => {
+        bst.addNode(false);
+    }
+
+    document.getElementById("insert-random-node").onclick = () => {
+        bst.addNode(true);
+    }
+
+    document.getElementById("clear-tree").onclick = () => {
+        bst.clear();
+    }
 }
