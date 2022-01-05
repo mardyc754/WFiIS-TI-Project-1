@@ -11,6 +11,7 @@ class Tree{
     constructor(){
         this.root = null;
         this.numOfNodes = 0;
+        this.listOfNodes = [];
         //this.height = 0;
     }
 
@@ -28,6 +29,7 @@ class Tree{
         else if(key < y.key){ y.left = z; }
         else { y.right = z; }
         this.numOfNodes++;
+        this.listOfNodes.push(z);
     }
 
     minNode(node){
@@ -138,12 +140,12 @@ class Tree{
 
     height(node){
         if (node == null)
-            return -1;
+            return 0;
         else
         {
             /* compute the depth of each subtree */
-            let leftHeight = height(node.left);
-            let rightHeight = height(node.right);
+            let leftHeight = this.height(node.left);
+            let rightHeight = this.height(node.right);
         
             /* use the larger one */
             if (leftHeight > rightHeight)
@@ -160,8 +162,8 @@ class Tree{
         let dist = -1;
     
         if ((root.key == key)||
-            (dist = findDepth(root.left, key)) >= 0 ||
-            (dist = findDepth(root.right, key)) >= 0)
+            (dist = this.findDepth(root.left, key)) >= 0 ||
+            (dist = this.findDepth(root.right, key)) >= 0)
             return dist + 1;
             
         return dist;
@@ -169,6 +171,8 @@ class Tree{
 
     clear(){
         this.root = null;
+        this.numOfNodes = 0;
+        this.listOfNodes = [];
     }
 }
 

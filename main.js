@@ -25,20 +25,27 @@ window.onload = (event) => {
     const canvas = document.getElementById("canvas");
     let bst = new DrawableBST(canvas);
     
-    bst.drawTree();
+    bst.createDrawableTree();
     
     //const ctx = canvas.getContext("2d");
     //ctx.clearRect(0,0,canvas.width, canvas.height);
 
-    let makeHowerable =  (e) => {
+    let makeHowerable = (e) => {
+        bst.ctx.clearRect(0,0,canvas.width, canvas.height);
         bst.howerableTree(bst.root, 0, 1, e);
+        bst.canvas.style.cursor = "pointer";
     };
+
+    let findNodeForDelete = (e) => {
+        bst.removeNode(e);
+    }
 
     document.getElementById("node-remove").onclick = () =>{
         if(bst.root != null){
             document.getElementById("normal-content").style.display = "none";
             document.getElementById("remove-content").style.display = "block";
             canvas.addEventListener("mousemove",  makeHowerable);
+            canvas.addEventListener("mousedown",  findNodeForDelete);
             document.getElementById("removal-info").innerHTML = ""
         }
         else{
@@ -50,17 +57,28 @@ window.onload = (event) => {
         document.getElementById("normal-content").style.display = "block";
         document.getElementById("remove-content").style.display = "none";
         canvas.removeEventListener("mousemove", makeHowerable);
+        bst.canvas.style.cursor = "default";
+        canvas.removeEventListener("mousedown",  findNodeForDelete);
     }
 
     document.getElementById("insert-node").onclick = () => {
         bst.addNode(false);
+        bst.inorder(bst.root);
     }
 
     document.getElementById("insert-random-node").onclick = () => {
         bst.addNode(true);
+        bst.inorder(bst.root);
     }
 
     document.getElementById("clear-tree").onclick = () => {
         bst.clear();
+    }
+
+    document.getElementById("traversal-button").onclick = () => {
+        // pobranie wartości z select
+        const select = document.getElementById("traversal-select");
+        let option = select.options[select.selectedIndex];
+        bst.drawTraversal(option.value);
     }
 }

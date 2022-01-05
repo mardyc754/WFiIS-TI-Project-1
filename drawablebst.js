@@ -4,6 +4,7 @@ class DrawableBST extends Tree{
         super();
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
+        this.drawableNodes = [];
     }
 
     drawNode(node, depth, i, fillcolor){
@@ -30,18 +31,6 @@ class DrawableBST extends Tree{
             this.ctx.fillText(node.key, i*this.canvas.width/(maxNumOfNodes+1)-nodeRadius/3, 70+depth*150+nodeRadius/3);   
             }
 
-            return { circle: circle, key: node.key };
-        }
-        return null;
-    }
-
-    preorderDraw(node, depth, i){
-        if(node != null){
-            let nodeRadius = depth == 0 ? 50 : 90/(depth+1);
-            let maxNumOfNodes = 2**depth;
-            
-            this.drawNode(node, depth, i, "white");
-
             // rysowanie linii łączących węzły
             if(node.parent != null){
                 let oldNodeRadius = depth-1 == 0 ? 50 : 90/depth;
@@ -58,32 +47,81 @@ class DrawableBST extends Tree{
                 }
                 this.ctx.stroke();
             }
-            
-            this.preorderDraw(node.left, depth+1, 2*i-1);
-            this.preorderDraw(node.right, depth+1, 2*i);
+
+            return { area: circle, 
+                     current: node,
+                     left: node.left, 
+                     right: node.right, 
+                     key: node.key, 
+                     color: fillcolor,
+                     depth: depth,
+                     rowPosition: i };
+        }
+        return null;
+    }
+
+    createDrawableNode(node, depth, i, fillcolor){
+        this.drawableNodes.push(this.drawNode(node, depth, i, fillcolor));
+    }
+
+    async drawTraversal(mode){
+        this.createDrawableTree(mode);
+        if(this.drawableNodes.length > 0){
+            for(let i=0; i<this.drawableNodes.length; i++){
+                let currentNode = this.drawableNodes[i];
+                this.drawNode(currentNode.current, currentNode.depth, currentNode.rowPosition, "lime");
+                await new Promise(r => setTimeout(r, 500));
+            }
+        }
+        this.createDrawableTree(mode);
+    }
+
+    listAllDrawableNodes(node, depth, i, mode){
+        if(node != null){
+            if(mode == "preorder"){
+                this.drawableNodes.push(this.drawNode(node, depth, i, "white"));
+                this.listAllDrawableNodes(node.left, depth+1, 2*i-1, "preorder");
+                this.listAllDrawableNodes(node.right, depth+1, 2*i, "preorder");
+            }
+            if(mode == "postorder"){
+                this.listAllDrawableNodes(node.left, depth+1, 2*i-1, "postorder");
+                this.listAllDrawableNodes(node.right, depth+1, 2*i, "postorder");
+                this.drawableNodes.push(this.drawNode(node, depth, i, "white"));
+            }
+            else{
+                this.listAllDrawableNodes(node.left, depth+1, 2*i-1);
+                this.drawableNodes.push(this.drawNode(node, depth, i, "white"));
+                this.listAllDrawableNodes(node.right, depth+1, 2*i);
+            }
         }
     }
 
-    drawTree(){
+    createDrawableTree(mode){
         this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
-        this.ctx.strokeStyle = "black";
-        this.preorderDraw(this.root, 0, 1);
+        this.drawableNodes = [];
+        this.listAllDrawableNodes(this.root, 0, 1, mode);
+
+        // przejście preorder tworzy nadmiarowe węzły, które trzeba usunąć
+        if(mode === "preorder"){
+            let existingKeys = [];
+            for(let i=0; i<this.drawableNodes.length; i++){
+                if(existingKeys.includes(this.drawableNodes[i].key)){
+                    this.drawableNodes.splice(i, 1);
+                    i--;
+                }
+                else{
+                    existingKeys.push(this.drawableNodes[i].key);
+                }
+            }
+        }
     }
 
     addNode(isRandom){
         const key = isRandom ? Math.floor(Math.random()*1000) : Number(document.getElementById("form-key").value);
         this.insert(key);
-        document.getElementById("bst-height").innerHTML = this.height();
+        document.getElementById("bst-height").innerHTML = this.height(this.root);
         document.getElementById("number-of-nodes").innerHTML = this.numOfNodes;
-        this.drawTree();
-    }
-
-    removeNode(){
-        const key = Number(document.getElementById("form-key").value);
-        //this.remove(key);
-        document.getElementById("bst-height").innerHTML = this.height();
-        document.getElementById("number-of-nodes").innerHTML = this.numOfNodes;
-        this.drawTree();
+        this.createDrawableTree();
     }
 
     getMousePosition(e){
@@ -106,23 +144,52 @@ class DrawableBST extends Tree{
     createHowerableNode(node, depth, i, event){
         let pos = this.getMousePosition(event);
         let nodeContent = this.drawNode(node, depth, i, "white");
-    
+        
         let fillcolor = "white";
-        if(nodeContent.circle != null){
-            if (this.ctx.isPointInPath(nodeContent.circle, pos.x, pos.y)) {
-                fillcolor = "green";
+        if(nodeContent.area != null){
+            if (this.ctx.isPointInPath(nodeContent.area, pos.x, pos.y)) {
+                fillcolor = "lime";
             }
             else {
                 fillcolor = "white";
             }
             nodeContent = this.drawNode(node, depth, i, fillcolor);
         }
+        return nodeContent;
+    }
+
+    searchPointedNode(node, key, depth, i, event){
+        if(node == null)
+        return null;
+
+        else if(key < node.key)
+            return this.searchPointedNode(node.left, key, depth+1, 2*i-1, event);
+
+        else if(key > node.key)
+            return this.searchPointedNode(node.right, key,  depth+1, 2*i, event);
+        else{
+            console.log(this.createHowerableNode(node, depth, i, event));
+            return this.createHowerableNode(node, depth, i, event);
+        }
+    }
+
+    removeNode(event){
+        let pos = this.getMousePosition(event);
+        this.drawableNodes.forEach((node) =>{
+            if(this.ctx.isPointInPath(node.area, pos.x, pos.y)){
+                this.remove(node.key);
+                //this.numOfNodes--;
+            }
+        });
+
+        document.getElementById("bst-height").innerHTML = this.height(this.root);
+        document.getElementById("number-of-nodes").innerHTML = this.numOfNodes;
+        this.createDrawableTree();
     }
     
     howerableTree(node, depth, i, event){
         if(node != null){
             this.createHowerableNode(node, depth, i, event);
-    
             this.howerableTree(node.left, depth+1, 2*i-1, event);
             this.howerableTree(node.right, depth+1, 2*i, event);
         }
@@ -131,6 +198,8 @@ class DrawableBST extends Tree{
     clear(){
         super.clear();
         this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
+        document.getElementById("bst-height").innerHTML = this.height(this.root);
+        document.getElementById("number-of-nodes").innerHTML = this.numOfNodes;
     }
 
 }
