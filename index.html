@@ -3,6 +3,9 @@
     <head>
         <link rel=stylesheet href="style.css">
         <link rel="icon" href="favicon.ico">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+        <script src="utils.js"></script>
         <script src="create_tree.js"></script>
         <script src="bst.js"></script>
         <script src="drawablebst.js"></script>
@@ -12,17 +15,23 @@
     </head>
     <body onload="changeContent(event, 'definition')">
         <header>
+
+            <!-- 
+            <div id="menu-icon"> 
+                
+            </div>
+            -->
+                <i onclick="showOrHideSidebar()" id="menu-icon" class="material-icons" style="font-size:50px">menu</i>
             <h1>Drzewo poszukiwań binarnych</h1>
         </header>
         <div class="flex">
         <nav>
             <ul>
-                <li><button class="link" onclick="changeContent(event, 'definition')">Definicja</button></li>
+                <li><button class="link" onclick="changeContent(event, 'definition')" id="defaultOpen">Definicja</button></li>
                 <li><button class="link" onclick="changeContent(event, 'node-properties')">Kilka pojęć</button></li>
                 <li><button class="link" onclick="changeContent(event, 'tree-walk')">Przeszukiwanie BST</button></li>
                 <li><button class="link" onclick="changeContent(event, 'nodes')">Dodawanie i usuwanie węzłów</button></li>
-                <li><button class="link" onclick="changeContent(event, 'simulation')" id="defaultOpen">Symulacja</button></li>
-                <li><button class="link" onclick="changeContent(event, 'other')">Więcej informacji</button></li>
+                <li><button class="link" onclick="changeContent(event, 'simulation')">Symulacja</button></li>
                 <li><button class="link" onclick="changeContent(event, 'about')">O projekcie</button></li>
             </ul>
         </nav>
@@ -51,11 +60,12 @@
                 <li><p>Jeżeli dany węzeł nie posiada lewego i/lub prawego potomka, to za wartość potomka przyjmuje się <strong>NULL</strong>, czyli brak wartości. 
                     Węzeł nieposiadający potomków nazywany jest <strong>liściem</strong>.</p></li>
                 <li><p>Węzły posiadające wspólnego rodzica nazywamy <strong>rodzeństwem</strong>.</p></li>
+                </ul>
                 <figure>
-                    <img src="images/bst_elements_pl.png" alt="bst-elements" id="bst-elements"/>
+                    <img src="images/bst_elements.png" alt="bst-elements" id="bst-elements"/>
                     <figcaption>Drzewo poszukiwań binarnych i jego elementy</figcaption>
                 </figure>
-                        
+                <ul>        
                 <li><p><strong>Najmniejszym</strong> elementem drzewa poszukiwań binarnych jest węzeł znajdujący się <strong>najdalej na lewo</strong> od korzenia:</p>
                 <pre class="code">
     TREE-MINIMUM(x)
@@ -109,7 +119,10 @@
     4.      INORDER-TRAVERSAL(right[x])
                         </pre>
                         <figure>
-                            <img src="images/inorder.gif" alt="inorder" class="bst-gif"/>
+                            <video width="400" height="400" controls>
+                                <source src="videos/inorder.mp4" type="video/mp4">
+                                <img src="images/inorder.gif" alt="inorder" class="bst-gif"/>
+                                </video> 
                             <figcaption>Przechodzenie po drzewie BST metodą inorder</figcaption>
                         </figure>
                     </li>
@@ -122,7 +135,10 @@
     4.      PREORDER-TRAVERSAL(right[x])
                         </pre>
                         <figure>
-                            <img src="images/preorder.gif" alt="preorder" class="bst-gif"/>
+                            <video width="400" height="400" controls>
+                                <source src="videos/preorder.mp4" type="video/mp4">
+                                <img src="images/preorder.gif" alt="preorder" class="bst-gif"/>
+                            </video> 
                             <figcaption>Przechodzenie po drzewie BST metodą preorder</figcaption>
                         </figure>
                     </li>
@@ -136,7 +152,10 @@
     4.      print(key[x])
                         </pre>
                     <figure>
-                        <img src="images/postorder.gif" alt="postorder" class="bst-gif"/>
+                        <video width="400" height="400" controls>
+                            <source src="videos/postorder.mp4" type="video/mp4">
+                            <img src="images/postorder.gif" alt="postorder" class="bst-gif"/>
+                        </video>
                         <figcaption>Przechodzenie po drzewie BST metodą postorder</figcaption>
                     </figure>
                     </li>
@@ -163,10 +182,17 @@
     13.         else right[y] = z
                     </pre>
                 <p>Poniżej znajduje się animacja przedstawiająca proces wstawiania węzła do drzewa BST:</p>
-                <figure>
+                <!-- <figure>
                     <img src="images/bst_insert.gif" alt="bst_insert" class="bst-gif"/>
                     <figcaption>Wstawianie elementu do drzewa BST</figcaption>
-                </figure>
+                </figure> -->
+                <figure>
+                    <video width="400" height="400" controls>
+                        <source src="videos/bst_insert.mp4" type="video/mp4">
+                        <img src="images/bst_insert.gif" alt="bst_insert" class="bst-gif"/>
+                    </video>
+                    <figcaption>Wstawianie elementu do drzewa BST</figcaption>
+                </figure> 
                 <p>Trudniejszą operacją jest usunięcie węzła, ponieważ operacja ta często wiąże się z restrukturyzacją położenia węzłów.
                     W zależności od posiadanych potomków węzła z rozważamy 3 przypadki:</p>
                     <ul>
@@ -211,45 +237,60 @@
                 <h2>Symulacja</h2>
                 <p>W poniższej symulacji możesz sam utworzyć własne drzewo binarne lub wygenerować je losowo.</p>
                 
-                <div class="simulation-area">
-                    <div class="tree-area">
+                <div id="simulation-area">
+                    <div id="tree-area">
                         <canvas id="canvas" width="1000" height="1000">
                             Twoja przeglądarka nie wspiera canvas :(
                         </canvas>
                     </div>
-                    <div class="form-area" id="normal-content">
-                    <form name="add-node" >
-                        <label for="key">Podaj wartość:</label>
-                        <input type="number" name="key" id="form-key" value="30"/>
-                        <input type="button" onclick="addNode(false)" value="Dodaj węzeł" />
-                    </form>
-                        <input type="button" onclick="addNode(true)" value="Dodaj losowy węzeł" />    
-                        <p>Liczba węzłów: <span id="number-of-nodes"></span></p>
-                        <p>Wysokość drzewa: <span id="bst-height"></span></p>
-                        <input type="button" onclick="nodeDeletion()" value="Usuń węzeł..." /><br/>
-                        <p id="removal-info"></p>
+                    <div id="form-area">
+                    <div id="normal-menu" class="form-top">
+                    <input type="button" onclick="displaySubmenu('add-menu')" value="Dodaj węzeł" /><br/>
+                    <input type="button" onclick="displaySubmenu('remove-menu')" value="Usuń węzeł..." /><br/>
+
                     <form name="tree-walk">
-                        <label for="traversal">Przejście:</label>
+                        <label for="traversal-select">Przejście:</label><br/>
                         <select name="traversal" id="traversal-select">
                             <option value="inorder" selected>Inorder</option>
                             <option value="preorder">Preorder</option>
                             <option value="postorder">Postorder</option>
                         </select>
-                        <input type="button" id="traversal-button" value="Przejdź po drzewie"/>
+                        <input type="button" id="traversal-button" value="Przejdź po drzewie" onclick="traverseTree()"/>
                     </form>
-                        <button id="clear-tree">Wyczyść drzewo</button>
+                    <p id="empty-tree-info"> </p>
                     </div>
-                    <div class="form-area" id="remove-content" style="display: none">
+                    <div id="add-menu" class="form-top" style="display: none">
+                        <form name="add-node" >
+                            <input type="button" class="return-button" onclick="returnToMainMenu('add-menu')" value="Powrót" /><br/>
+                            <label for="key">Podaj wartość:</label><br/>
+                            <input type="number" name="key" id="key" value="100" min="1" max="999"/><br/>
+                            <input type="button" onclick="addNode(false)" value="Dodaj węzeł" /><br/>
+                            <p>Podaj zakres wartości:</p>
+                            <label for="min-key">Od:</label>
+                            <input type="number" name="min-key" id="min-key" value="1" min="1" max="999"/><br/>
+                            <label for="min-key">Do:</label>
+                            <input type="number" name="max-key" id="max-key" value="200" min="1" max="999"/><br/>
+                            <input type="button" onclick="addNode(true)" value="Dodaj losowy węzeł" /><br/>
+                            <p id="add-node-info" style="color: darkred"></p>    
+                        </form>
+                    </div>
+                    <div id="remove-menu" class="form-top" style="display: none">
+                        <input type="button" class="return-button" onclick="returnToMainMenu('remove-menu')" value="Powrót" /> 
                         <p id="remove-info">Kliknij na węzeł, aby go usunąć</p>
-                        <input type="button" id="cancel-remove" value="Anuluj" /> 
                     </div>
+                    <div id="other-content">    
+                        <input type="button" id="clear-tree" onclick="clearTree()" value="Wyczyść drzewo" />
+                        <p>Liczba węzłów: <span id="number-of-nodes"></span></p>
+                        <p>Wysokość drzewa: <span id="bst-height"></span></p>
+                    </div>
+                </div>
                 </div>
                 
             </article>
-            <article id="other">
+            <!-- <article id="other">
                 <h2>Więcej informacji</h2>
-                <p>Więcej o drzewach binarnych możesz dowiedzieć się z poniższego filmu:</p>
-            </article>
+                <p>O drzewie binarnym możesz dowiedzieć się także z poniższego filmu:</p>
+            </article> -->
             <article id="about">
                 <h2>O projekcie</h2>
                 <p>Projekt ten został zrealizowany w celu zadania na przedmiot "Techniki internetowe", 5 semestr. Celem tego projektu
@@ -260,7 +301,7 @@
         </main>
     </div>
         <footer>
-            <p>&copy; 2021 Marta Dychała</p>
+            <p>&copy; 2022 Marta Dychała</p>
         </footer>
 
         <script src="main.js"></script>

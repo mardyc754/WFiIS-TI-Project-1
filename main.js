@@ -1,7 +1,10 @@
 const canvas = document.getElementById("canvas");
 let bst = new DrawableBST(canvas);
 
-bst.createDrawableTree(mode);
+document.getElementById("number-of-nodes").innerHTML = 0;
+document.getElementById("bst-height").innerHTML = 0;
+
+bst.createDrawableTree();
     
 function startWorker() {
     if (typeof(Worker) !== "undefined") {
@@ -32,29 +35,44 @@ let findNodeForDelete = (e) => {
     bst.removeNode(e);
 }
 
-function nodeDeletion(){
+function makeNodeInteractive(){
     if(bst.root != null){
-        document.getElementById("normal-content").style.display = "none";
-        document.getElementById("remove-content").style.display = "block";
         canvas.addEventListener("mousemove",  makeHowerable);
         canvas.addEventListener("click",  findNodeForDelete);
-        document.getElementById("removal-info").innerHTML = "";
+        document.getElementById("empty-tree-info").innerHTML = "";
+        return true;
     }
     else{
-        document.getElementById("removal-info").innerHTML = "Drzewo jest puste";
+        document.getElementById("empty-tree-info").innerHTML = "Drzewo jest puste";
+        return false;
     }
-}
-
-document.getElementById("cancel-remove").onclick = () =>{
-    document.getElementById("normal-content").style.display = "block";
-    document.getElementById("remove-content").style.display = "none";
-    canvas.removeEventListener("mousemove", makeHowerable);
-    bst.canvas.style.cursor = "default";
-    canvas.removeEventListener("click",  findNodeForDelete);
 }
 
 function addNode(isRandom){
     bst.addNode(isRandom);
+    document.getElementById("empty-tree-info").innerHTML = "";
+}
+
+function displaySubmenu(menuMode){
+    let isConditionSatisfied = true; 
+    if(menuMode === "remove-menu"){
+        isConditionSatisfied = makeNodeInteractive();
+    }
+
+    if(isConditionSatisfied){
+        document.getElementById("normal-menu").style.display = "none";
+        document.getElementById(menuMode).style.display = "block";
+    }
+}
+
+function returnToMainMenu(menuMode){
+    if(menuMode === "remove-menu"){
+        canvas.removeEventListener("mousemove", makeHowerable);
+        bst.canvas.style.cursor = "default";
+        canvas.removeEventListener("click",  findNodeForDelete);
+    }
+    document.getElementById(menuMode).style.display = "none";
+    document.getElementById("normal-menu").style.display = "block";
 }
 
 function clearTree(){
@@ -62,9 +80,24 @@ function clearTree(){
 }
 
 function traverseTree(){
-    const select = document.getElementById("traversal-select");
-    let option = select.options[select.selectedIndex];
-    bst.drawTraversal(option.value);
+    if(bst.root != null){
+        const select = document.getElementById("traversal-select");
+        let option = select.options[select.selectedIndex];
+        bst.drawTraversal(option.value);
+    } else{
+        document.getElementById("empty-tree-info").innerHTML = "Drzewo jest puste";
+    }
+}
+
+function displayAddNodeMenu(isMainMenuActive){
+    if(isMainMenuActive){
+        document.getElementById("normal-menu").style.display = "none";
+        document.getElementById("add-menu").style.display = "block";
+        document.getElementById("add-node-info").innerHTML = "";
+    }else{
+        document.getElementById("add-menu").style.display = "none";
+        document.getElementById("normal-menu").style.display = "block";
+    }
 }
 
 
@@ -86,4 +119,18 @@ function changeContent(event, section){
     document.getElementById(section).style.opacity = 1;
     document.getElementById(section).style.height = "auto";
     event.currentTarget.className += " active";
+}
+
+
+let isSidebarVisible = true;
+
+function showOrHideSidebar(){
+    if(isSidebarVisible){
+        document.querySelector('nav').style.display = "none";
+        isSidebarVisible = false;
+    }
+    else{
+        document.querySelector('nav').style.display = "block";
+        isSidebarVisible = true;
+    }
 }

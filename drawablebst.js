@@ -5,6 +5,7 @@ class DrawableBST extends Tree{
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.drawableNodes = [];
+        this.existingKeys = [];
     }
 
     drawNode(node, depth, i, fillcolor){
@@ -78,12 +79,12 @@ class DrawableBST extends Tree{
 
     listAllDrawableNodes(node, depth, i, mode){
         if(node != null){
-            if(mode == "preorder"){
+            if(mode === "preorder"){
                 this.drawableNodes.push(this.drawNode(node, depth, i, "white"));
                 this.listAllDrawableNodes(node.left, depth+1, 2*i-1, "preorder");
                 this.listAllDrawableNodes(node.right, depth+1, 2*i, "preorder");
             }
-            if(mode == "postorder"){
+            if(mode === "postorder"){
                 this.listAllDrawableNodes(node.left, depth+1, 2*i-1, "postorder");
                 this.listAllDrawableNodes(node.right, depth+1, 2*i, "postorder");
                 this.drawableNodes.push(this.drawNode(node, depth, i, "white"));
@@ -96,53 +97,54 @@ class DrawableBST extends Tree{
         }
     }
 
+    findExistingKeys(){
+        this.existingKeys = [];
+        for(let i=0; i<this.drawableNodes.length; i++){
+            if(this.existingKeys.includes(this.drawableNodes[i].key)){
+                this.drawableNodes.splice(i, 1);
+                i--;
+            }
+            else{
+                this.existingKeys.push(this.drawableNodes[i].key);
+            }
+        }
+        return this.existingKeys;
+    }
+
     createDrawableTree(mode){
         this.ctx.clearRect(0,0,this.canvas.width, this.canvas.height);
         this.drawableNodes = [];
         this.listAllDrawableNodes(this.root, 0, 1, mode);
 
         // przejście preorder tworzy nadmiarowe węzły, które trzeba usunąć
-        if(mode === "preorder"){
-            let existingKeys = [];
-            for(let i=0; i<this.drawableNodes.length; i++){
-                if(existingKeys.includes(this.drawableNodes[i].key)){
-                    this.drawableNodes.splice(i, 1);
-                    i--;
-                }
-                else{
-                    existingKeys.push(this.drawableNodes[i].key);
-                }
-            }
-        }
+        this.findExistingKeys();
     }
 
+
     addNode(isRandom){
-        const key = isRandom ? Math.floor(Math.random()*1000) : Number(document.getElementById("form-key").value);
-        this.insert(key);
+        const info = document.getElementById("add-node-info");
+        let key = false;
+        if(isRandom){
+            key = generateRandomNode(this);
+        } else{
+            key = addNodeByKey(this);
+        }
+        
+        if(key){
+            this.insert(key);
+        }
+
+        if(this.height(this.root) > 6){
+            info.innerHTML = "Nie można wstawić węzła, maksymalna wysokość drzewa to 6";
+            this.remove(key);
+        }
         document.getElementById("bst-height").innerHTML = this.height(this.root);
         document.getElementById("number-of-nodes").innerHTML = this.numOfNodes;
         this.createDrawableTree();
     }
 
-    getMousePosition(e){
-        let rect = this.canvas.getBoundingClientRect();
-        let scaleX = this.canvas.width / rect.width;
-        let scaleY = this.canvas.height / rect.height;
-    
-        let x = parseInt((e.clientX-rect.left)*scaleX);
-        let y = parseInt((e.clientY-rect.top)*scaleY);
-    
-        let xNew = (e.clientX - rect.left) / (rect.right - rect.left) * this.canvas.width;
-        let yNew = (e.clientY - rect.top) / (rect.bottom - rect.top) * this.canvas.height;
-    
-        return {
-            x: x,
-            y: y
-        };
-    }
-
     createHowerableNode(node, depth, i, event){
-        let pos = this.getMousePosition(event);
+        let pos = getMousePosition(event, this.canvas);
         let nodeContent = this.drawNode(node, depth, i, "white");
         
         let fillcolor = "white";
@@ -174,11 +176,10 @@ class DrawableBST extends Tree{
     }
 
     removeNode(event){
-        let pos = this.getMousePosition(event);
+        let pos = getMousePosition(event, this.canvas);
         this.drawableNodes.forEach((node) =>{
             if(this.ctx.isPointInPath(node.area, pos.x, pos.y)){
                 this.remove(node.key);
-                //this.numOfNodes--;
             }
         });
 
