@@ -3,25 +3,25 @@
     <head>
         <link rel=stylesheet href="style.css">
         <link rel="icon" href="favicon.ico">
+        <script src="create_tree.js"></script>
         <script src="bst.js"></script>
         <script src="drawablebst.js"></script>
-        <script src="main.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8" />
         <title>Projekt 1</title>
     </head>
-    <body>
+    <body onload="changeContent(event, 'definition')">
         <header>
             <h1>Drzewo poszukiwań binarnych</h1>
         </header>
         <div class="flex">
         <nav>
             <ul>
-                <li><button class="link" onclick="changeContent(event, 'definition')" id="defaultOpen">Definicja</button></li>
+                <li><button class="link" onclick="changeContent(event, 'definition')">Definicja</button></li>
                 <li><button class="link" onclick="changeContent(event, 'node-properties')">Kilka pojęć</button></li>
                 <li><button class="link" onclick="changeContent(event, 'tree-walk')">Przeszukiwanie BST</button></li>
                 <li><button class="link" onclick="changeContent(event, 'nodes')">Dodawanie i usuwanie węzłów</button></li>
-                <li><button class="link" onclick="changeContent(event, 'simulation')">Symulacja</button></li>
+                <li><button class="link" onclick="changeContent(event, 'simulation')" id="defaultOpen">Symulacja</button></li>
                 <li><button class="link" onclick="changeContent(event, 'other')">Więcej informacji</button></li>
                 <li><button class="link" onclick="changeContent(event, 'about')">O projekcie</button></li>
             </ul>
@@ -213,18 +213,20 @@
                 
                 <div class="simulation-area">
                     <div class="tree-area">
-                        <canvas id="canvas" width="1000" height="1000"></canvas>
+                        <canvas id="canvas" width="1000" height="1000">
+                            Twoja przeglądarka nie wspiera canvas :(
+                        </canvas>
                     </div>
                     <div class="form-area" id="normal-content">
                     <form name="add-node" >
                         <label for="key">Podaj wartość:</label>
                         <input type="number" name="key" id="form-key" value="30"/>
-                        <input type="button" id="insert-node" onclick="addNode(false)" value="Dodaj węzeł" />
+                        <input type="button" onclick="addNode(false)" value="Dodaj węzeł" />
                     </form>
-                        <input type="button" id="insert-random-node" value="Dodaj losowy węzeł" />    
+                        <input type="button" onclick="addNode(true)" value="Dodaj losowy węzeł" />    
                         <p>Liczba węzłów: <span id="number-of-nodes"></span></p>
                         <p>Wysokość drzewa: <span id="bst-height"></span></p>
-                        <input type="button" id="node-remove" value="Usuń węzeł..." /><br/>
+                        <input type="button" onclick="nodeDeletion()" value="Usuń węzeł..." /><br/>
                         <p id="removal-info"></p>
                     <form name="tree-walk">
                         <label for="traversal">Przejście:</label>
@@ -261,5 +263,6 @@
             <p>&copy; 2021 Marta Dychała</p>
         </footer>
 
+        <script src="main.js"></script>
     </body>
 </html>

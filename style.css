@@ -122,7 +122,6 @@ figure{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    /*height: 600px;*/
 }
 
 .tree-area{
