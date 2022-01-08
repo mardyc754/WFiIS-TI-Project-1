@@ -6,21 +6,15 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
         <script src="utils.js"></script>
-        <script src="create_tree.js"></script>
+        <script src="drawnnode.js"></script>
         <script src="bst.js"></script>
-        <script src="drawablebst.js"></script>
+        <script src="drawnbst.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8" />
         <title>Projekt 1</title>
     </head>
     <body onload="changeContent(event, 'definition')">
         <header>
-
-            <!-- 
-            <div id="menu-icon"> 
-                
-            </div>
-            -->
                 <i onclick="showOrHideSidebar()" id="menu-icon" class="material-icons" style="font-size:50px">menu</i>
             <h1>Drzewo poszukiwań binarnych</h1>
         </header>
@@ -110,7 +104,8 @@
                 <p>Własność drzewa BST umożliwia wypisanie wszystkich jego węzłów na 3 sposoby: metodą inorder, preorder lub postorder.</p>
                 <ul>
                     <li><strong>Metoda inorder</strong> pozwala na wypisanie elementów w drzewie binarnym <strong>od węzła najdalej na lewo do węzła najdalej na prawo</strong> od korzenia.
-                        Po węzłach przechodzi zgodnie ze schematem: lewy potomek, węzeł, prawy potomek, rodzic. W ten sposób dla drzewa BST można uzyskać posortowany ciąg elementów:
+                        Po węzłach przechodzi zgodnie ze schematem: lewy potomek, węzeł, prawy potomek, rodzic. W ten sposób dla drzewa BST można uzyskać posortowany ciąg elementów, 
+                        co przydatne jest w przypadku algorytmów sortujących:
                         <pre class="code">
     INORDER-TRAVERSAL(x)
     1.  if x != NULL then
@@ -142,8 +137,7 @@
                             <figcaption>Przechodzenie po drzewie BST metodą preorder</figcaption>
                         </figure>
                     </li>
-                    <li><strong>Metoda postorder</strong> pozwala na wypisanie elementów w drzewie BST w kolejności od lewej do prawej 
-                        dla danej wysokości drzewa startując najwyżej i zmierzając do korzenia:
+                    <li><strong>Metoda postorder</strong> pozwala na wypisanie elementów w drzewie BST od liści lewego poddrzewa poprzez liście prawego podrzewa aż do korzenia
                         <pre class="code">
     POSTORDER-TRAVERSAL(x)
     1.  if x != NULL then
@@ -182,10 +176,6 @@
     13.         else right[y] = z
                     </pre>
                 <p>Poniżej znajduje się animacja przedstawiająca proces wstawiania węzła do drzewa BST:</p>
-                <!-- <figure>
-                    <img src="images/bst_insert.gif" alt="bst_insert" class="bst-gif"/>
-                    <figcaption>Wstawianie elementu do drzewa BST</figcaption>
-                </figure> -->
                 <figure>
                     <video width="400" height="400" controls>
                         <source src="videos/bst_insert.mp4" type="video/mp4">
@@ -235,7 +225,7 @@
             </article>
             <article id="simulation">
                 <h2>Symulacja</h2>
-                <p>W poniższej symulacji możesz sam utworzyć własne drzewo binarne lub wygenerować je losowo.</p>
+                <p>W poniższej symulacji możesz sam utworzyć własne drzewo binarne.</p>
                 
                 <div id="simulation-area">
                     <div id="tree-area">
@@ -284,19 +274,30 @@
                         <p>Wysokość drzewa: <span id="bst-height"></span></p>
                     </div>
                 </div>
-                </div>
-                
+                </div> 
             </article>
-            <!-- <article id="other">
-                <h2>Więcej informacji</h2>
-                <p>O drzewie binarnym możesz dowiedzieć się także z poniższego filmu:</p>
-            </article> -->
+
             <article id="about">
                 <h2>O projekcie</h2>
-                <p>Projekt ten został zrealizowany w celu zadania na przedmiot "Techniki internetowe", 5 semestr. Celem tego projektu
+                <p>Projekt ten został zrealizowany jako zadanie na przedmiot "Techniki internetowe", 5 semestr. Celem tego projektu
                     było wykorzystanie HTML, CSS i JavaScript do przedstawienia wybranego pojęcia z matematyki, fizyki lub informatyki.
                     Działanie projektu przetestowano na przeglądarkach Google Chrome oraz Firefox.
                 </p>
+                
+                <p>Żródła:</p>
+                    <ul>
+                        <li>Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest: Wprowadzenie do algorytmów. Warszawa: Wydawnictwa Naukowo-Techniczne, 2001</li>
+                        <li><a href="https://pl.wikipedia.org/wiki/Binarne_drzewo_poszukiwa%C5%84" target="_blank">https://pl.wikipedia.org/wiki/Binarne_drzewo_poszukiwa%C5%84</a></li>
+                        <li><a href="https://en.wikipedia.org/wiki/Binary_search_tree" target="_blank">https://en.wikipedia.org/wiki/Binary_search_tree</a></li>
+                    </ul>
+
+                <p>Niektóre ilustracje na tej stronie objęte są prawami autorskimi, 
+                    dlatego też projekt ten nie jest przeznaczony 
+                    do celów komercyjnych ani rozprowadzania.
+                </p>
+
+                <p>Some pictures on this site are protected by copyright laws, hence this site is not meant 
+                    for publicity or commercial use by any means.</p>
             </article>
         </main>
     </div>

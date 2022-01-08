@@ -1,111 +1,7 @@
-const canvas = document.getElementById("canvas");
-let bst = new DrawableBST(canvas);
-
-document.getElementById("number-of-nodes").innerHTML = 0;
-document.getElementById("bst-height").innerHTML = 0;
-
-bst.createDrawableTree();
-    
-function startWorker() {
-    if (typeof(Worker) !== "undefined") {
-      if (typeof(w) == "undefined") {
-        w = new Worker("create_tree.js");
-      }
-      w.onmessage = function(event) {
-        console.log(event.data);
-      };
-    } else {
-      //document.getElementById("cnn_wrapper").innerHTML = "Sorry! No Web Worker support.";
-    }
-  }
-  
-  function stopWorker() {
-    w.terminate();
-    w = undefined;
-  }
-
-
-let makeHowerable = (e) => {
-    bst.ctx.clearRect(0,0,canvas.width, canvas.height);
-    bst.howerableTree(bst.root, 0, 1, e);
-    bst.canvas.style.cursor = "pointer";
-};
-
-let findNodeForDelete = (e) => {
-    bst.removeNode(e);
-}
-
-function makeNodeInteractive(){
-    if(bst.root != null){
-        canvas.addEventListener("mousemove",  makeHowerable);
-        canvas.addEventListener("click",  findNodeForDelete);
-        document.getElementById("empty-tree-info").innerHTML = "";
-        return true;
-    }
-    else{
-        document.getElementById("empty-tree-info").innerHTML = "Drzewo jest puste";
-        return false;
-    }
-}
-
-function addNode(isRandom){
-    bst.addNode(isRandom);
-    document.getElementById("empty-tree-info").innerHTML = "";
-}
-
-function displaySubmenu(menuMode){
-    let isConditionSatisfied = true; 
-    if(menuMode === "remove-menu"){
-        isConditionSatisfied = makeNodeInteractive();
-    }
-
-    if(isConditionSatisfied){
-        document.getElementById("normal-menu").style.display = "none";
-        document.getElementById(menuMode).style.display = "block";
-    }
-}
-
-function returnToMainMenu(menuMode){
-    if(menuMode === "remove-menu"){
-        canvas.removeEventListener("mousemove", makeHowerable);
-        bst.canvas.style.cursor = "default";
-        canvas.removeEventListener("click",  findNodeForDelete);
-    }
-    document.getElementById(menuMode).style.display = "none";
-    document.getElementById("normal-menu").style.display = "block";
-}
-
-function clearTree(){
-    bst.clear();
-}
-
-function traverseTree(){
-    if(bst.root != null){
-        const select = document.getElementById("traversal-select");
-        let option = select.options[select.selectedIndex];
-        bst.drawTraversal(option.value);
-    } else{
-        document.getElementById("empty-tree-info").innerHTML = "Drzewo jest puste";
-    }
-}
-
-function displayAddNodeMenu(isMainMenuActive){
-    if(isMainMenuActive){
-        document.getElementById("normal-menu").style.display = "none";
-        document.getElementById("add-menu").style.display = "block";
-        document.getElementById("add-node-info").innerHTML = "";
-    }else{
-        document.getElementById("add-menu").style.display = "none";
-        document.getElementById("normal-menu").style.display = "block";
-    }
-}
-
-
 function changeContent(event, section){
     let articles, links;
     articles = document.getElementsByTagName("article");
     for(let i = 0; i<articles.length; i++){
-        //articles[i].style.display = "none";
         articles[i].style.opacity = 0;
         articles[i].style.height = 0;
         articles[i].style.overflow = "hidden";
@@ -121,7 +17,6 @@ function changeContent(event, section){
     event.currentTarget.className += " active";
 }
 
-
 let isSidebarVisible = true;
 
 function showOrHideSidebar(){
@@ -133,4 +28,90 @@ function showOrHideSidebar(){
         document.querySelector('nav').style.display = "block";
         isSidebarVisible = true;
     }
+}
+
+function displaySubmenu(menuMode){
+    let isGettingToSubmenuPossible = true; 
+    if(menuMode === "remove-menu"){
+        isGettingToSubmenuPossible = makeNodeInteractive();
+    }
+
+    if(isGettingToSubmenuPossible){
+        document.getElementById("normal-menu").style.display = "none";
+        document.getElementById(menuMode).style.display = "block";
+    }
+}
+
+
+const canvas = document.getElementById("canvas");
+let bst = new DrawnBST(canvas);
+
+document.getElementById("number-of-nodes").innerHTML = 0;
+document.getElementById("bst-height").innerHTML = 0;
+
+bst.createDrawnTree();
+
+
+function returnToMainMenu(menuMode){
+    if(menuMode === "remove-menu"){
+        canvas.removeEventListener("mousemove", activateTree);
+        bst.canvas.style.cursor = "default";
+        canvas.removeEventListener("click",  removeNode);
+    }
+    document.getElementById(menuMode).style.display = "none";
+    document.getElementById("normal-menu").style.display = "block";
+}
+
+
+function displayAddNodeMenu(isMainMenuActive){
+    if(isMainMenuActive){
+        document.getElementById("normal-menu").style.display = "none";
+        document.getElementById("add-menu").style.display = "block";
+        document.getElementById("add-node-info").innerHTML = "";
+    }else{
+        document.getElementById("add-menu").style.display = "none";
+        document.getElementById("normal-menu").style.display = "block";
+    }
+}
+
+function addNode(isRandom){
+    bst.addNode(isRandom);
+    document.getElementById("empty-tree-info").innerHTML = "";
+}
+
+let activateTree = (e) => {
+    bst.ctx.clearRect(0,0,canvas.width, canvas.height);
+    bst.interactiveTree(bst.root, 0, 1, e);
+    bst.canvas.style.cursor = "pointer";
+};
+
+let removeNode = (e) => {
+    bst.removeNode(e);
+}
+
+function makeNodeInteractive(){
+    if(bst.root != null){
+        canvas.addEventListener("mousemove",  activateTree);
+        canvas.addEventListener("click",  removeNode);
+        document.getElementById("empty-tree-info").innerHTML = "";
+        return true;
+    }
+    else{
+        document.getElementById("empty-tree-info").innerHTML = "Drzewo jest puste";
+        return false;
+    }
+}
+
+function traverseTree(){
+    if(bst.root != null){
+        const select = document.getElementById("traversal-select");
+        let option = select.options[select.selectedIndex];
+        bst.drawTraversal(option.value);
+    } else{
+        document.getElementById("empty-tree-info").innerHTML = "Drzewo jest puste";
+    }
+}
+
+function clearTree(){
+    bst.clear();
 }

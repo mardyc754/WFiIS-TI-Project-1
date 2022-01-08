@@ -11,8 +11,6 @@ class Tree{
     constructor(){
         this.root = null;
         this.numOfNodes = 0;
-        this.listOfNodes = [];
-        //this.height = 0;
     }
 
     insert(key){
@@ -29,7 +27,6 @@ class Tree{
         else if(key < y.key){ y.left = z; }
         else { y.right = z; }
         this.numOfNodes++;
-        this.listOfNodes.push(z);
     }
 
     minNode(node){
@@ -172,7 +169,6 @@ class Tree{
     clear(){
         this.root = null;
         this.numOfNodes = 0;
-        this.listOfNodes = [];
     }
 }
 
