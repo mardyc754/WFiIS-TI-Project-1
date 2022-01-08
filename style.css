@@ -249,11 +249,18 @@ input[type=button]:hover:not(.return-button){
 }
 
 
-@media screen and (max-width: 710px){
+@media screen and (max-width: 910px){
     .flex{
         flex-direction: column;
     }
+    header{
+        position: sticky;
+        z-index: 2;
+        top: 0;
+    }
     nav{
+        position: sticky;
+        top: 5.1em;
         width: 100%;
         flex: 0;
     }
@@ -262,10 +269,18 @@ input[type=button]:hover:not(.return-button){
     }
 }
 
+@media screen and (max-width: 643px){
+    nav{
+        top: 7.2em;
+    }
+    main{
+        padding: 1em;
+    }
+}
+
 
 @media screen and (max-width: 1000px){
     #simulation-area{
         flex-direction: column;
     }
-
 }
