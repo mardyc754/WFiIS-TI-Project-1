@@ -3,184 +3,308 @@
     <head>
         <link rel=stylesheet href="style.css">
         <link rel="icon" href="favicon.ico">
-        <script src="main.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+        <script src="js/utils.js"></script>
+        <script src="js/drawnnode.js"></script>
+        <script src="js/bst.js"></script>
+        <script src="js/drawnbst.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="UTF-8" />
         <title>Projekt 1</title>
     </head>
-    <body>
+    <body onload="changeContent(event, 'definition')">
         <header>
+                <i onclick="showOrHideSidebar()" id="menu-icon" class="material-icons" style="font-size:50px">menu</i>
             <h1>Drzewo poszukiwań binarnych</h1>
         </header>
         <div class="flex">
         <nav>
             <ul>
                 <li><button class="link" onclick="changeContent(event, 'definition')" id="defaultOpen">Definicja</button></li>
+                <li><button class="link" onclick="changeContent(event, 'node-properties')">Kilka pojęć</button></li>
                 <li><button class="link" onclick="changeContent(event, 'tree-walk')">Przeszukiwanie BST</button></li>
                 <li><button class="link" onclick="changeContent(event, 'nodes')">Dodawanie i usuwanie węzłów</button></li>
-                <li><button class="link" onclick="changeContent(event, 'node-properties')">Własności węzłów</button></li>
                 <li><button class="link" onclick="changeContent(event, 'simulation')">Symulacja</button></li>
-                <li><button class="link" onclick="changeContent(event, 'other')">Więcej informacji</button></li>
                 <li><button class="link" onclick="changeContent(event, 'about')">O projekcie</button></li>
             </ul>
         </nav>
-        <div class="main-content">
+        <main>
             <article id="definition">
                 <h2>Definicja</h2>
-                <p>Drzewo poszukiwań binarnych (ang. Binary Search Tree, w skrócie BST) jest jednym z rodzajów drzewa binarnego, czyli takiego, w którym każdy z węzłów może posiadać
-                    maksymalnie dwóch bezpośrednich potomków.
-                    Swoją nazwę zawdzięcza swojej właściwości umożliwiającej wyszukiwanie binarne. Węzły w drzewie BST 
-                    uporządkowane są w ścisłej hierarchii:</p>
+                <p><strong>Drzewo poszukiwań binarnych</strong> (ang. Binary Search Tree, w skrócie BST) jest jednym z rodzajów drzewa binarnego, czyli takiego, w którym każdy z węzłów (elementów drzewa) może posiadać
+                    maksymalnie dwóch bezpośrednich potomków. 
+                    Za pomocą drzewa poszukiwań binarnych  możliwe jest wyszukiwanie binarne, które jest szybsze niż zwykłe, liniowe. Węzły w drzewie BST są zatem 
+                    uporządkowane w ścisłej hierarchii:</p>
                     <ul>
-                    <li>lewy potomek węzła ma wartość <strong>nie większą</strong> od wartości rodzica,</li> 
-                    <li>prawy potomek węzła ma zawsze <strong>większą</strong> wartość od wartości rodzica.</li>
+                    <li>lewy potomek węzła ma klucz o wartości <strong>nie większej</strong> od wartości klucza rodzica (węzła nadrzędnego),</li> 
+                    <li>prawy potomek węzła ma zawsze klucz o <strong>większej</strong> wartości od wartości klucza rodzica.</li>
                 </ul>
-                <p>Prawie każdy z węzłów w drzewie binarnym posiada węzeł nadrzędny, zwany <strong>rodzicem</strong>. Wyjątkiem jest węzeł główny drzewa binarnego, zwany <strong>korzeniem</strong>.</p>
-                <p>Jeżeli dany węzeł nie posiada lewego i/lub prawego potomka, to za wartość potomka przyjmuje się <strong>NULL</strong>, czyli brak wartości.</p>
-                <p>Własności drzewa BST sprawiają, że może być ono wykorzystane jako słownik lub kolejka priorytetowa.</p>        
+                <figure>
+                    <img src="images/Binary_search_tree.svg" alt="bst" id="bst-example"/>
+                    <figcaption>Przykładowe drzewo poszukiwań binarnych</figcaption>
+                </figure>
+
+                <p>Własności drzewa BST sprawiają, że może być ono wykorzystane jako słownik lub kolejka priorytetowa.</p>
             </article>
             <article id="node-properties">
-                <h2>Własności węzłów</h2>
-                
-                <p>Drzewo poszukiwań binarnych ma przyjemną własność, że <strong>najmniejszym</strong> jego elementem jest węzeł znajdujący się <strong>najdalej na lewo</strong> od korzenia:</p>
-                <pre>
-                    TREE-MINIMUM(x)
-                    1.   while left[x] != NULL
-                    2.       do x = left[x]
-                    3.   return x 
-                </pre>
-                <p>natomiast <strong>największym</strong> elementem w drzewie jest - analogicznie - węzeł znajdujący się <strong>najdalej na prawo</strong> od korzenia:</p>
-                <pre>
-                    TREE-MAXIMUM(x)
-                    1.   while right[x] != NULL
-                    2.       do x = right[x]
-                    3.   return x 
-                 </pre>
-                
-                <p>Węzły mogą także posiadać swojego następnika lub poprzednika. <strong>Następnik</strong> w drzewie BST to element o <strong>najmniejszej wartości większej od wartości klucza</strong> węzła.
+                <h2>Kilka pojęć związanych z drzewem BST</h2>
+                <ul>
+                <li><p>Prawie każdy z węzłów w drzewie binarnym posiada węzeł nadrzędny, zwany <strong>rodzicem</strong>. Wyjątkiem jest węzeł główny drzewa binarnego, zwany <strong>korzeniem</strong>.</p></li>
+                <li><p>Jeżeli dany węzeł nie posiada lewego i/lub prawego potomka, to za wartość potomka przyjmuje się <strong>NULL</strong>, czyli brak wartości. 
+                    Węzeł nieposiadający potomków nazywany jest <strong>liściem</strong>.</p></li>
+                <li><p>Węzły posiadające wspólnego rodzica nazywamy <strong>rodzeństwem</strong>.</p></li>
+                </ul>
+                <figure>
+                    <img src="images/bst_elements.png" alt="bst-elements" id="bst-elements"/>
+                    <figcaption>Drzewo poszukiwań binarnych i jego elementy</figcaption>
+                </figure>
+                <ul>        
+                <li><p><strong>Najmniejszym</strong> elementem drzewa poszukiwań binarnych jest węzeł znajdujący się <strong>najdalej na lewo</strong> od korzenia:</p>
+                <pre class="code">
+    TREE-MINIMUM(x)
+    1.   while left[x] != NULL
+    2.       do x = left[x]
+    3.   return x 
+                </pre></li>
+                <li><p>natomiast <strong>największym</strong> elementem w drzewie jest - analogicznie - węzeł znajdujący się <strong>najdalej na prawo</strong> od korzenia:</p>
+                <pre class="code">
+    TREE-MAXIMUM(x)
+    1.   while right[x] != NULL
+    2.       do x = right[x]
+    3.   return x 
+                 </pre></li>
+                 <li><p>Węzły mogą także posiadać swojego następnika lub poprzednika. <strong>Następnik</strong> w drzewie BST to element o <strong>najmniejszej wartości większej od wartości klucza</strong> węzła.
                     Dlatego też można go odnaleźć za pomocą poniższego algorytmu:</p>
-                <pre>
-                    TREE-SUCCESSOR(x)
-                    1.  if right[x] != NULL
-                    2.      then return TREE-MINIMUM(right[x])
-                    3.  y = parent[x]
-                    4.  while y != NULL and x == right[y] 
-                    5.      do x = y
-                    6.      y = parent[y]
-                    7.  return y
-                </pre>
-                <p>Analogicznie można wyznaczyć <strong>poprzednika</strong> danego węzła - jest to po prostu <strong>największy element, który jest mniejszy</strong> od danego węzła:</p>
-                <pre>
-                    TREE-PREDECESSOR(x)
-                    1.  if left[x] != NULL
-                    2.      then return TREE-MAXIMUM(left[x])
-                    3.  y = parent[x]
-                    4.  while y != NULL and x == left[y] 
-                    5.      do x = y
-                    6.      y = parent[y]
-                    7.  return y
-                </pre>
+                <pre class="code">
+    TREE-SUCCESSOR(x)
+    1.  if right[x] != NULL
+    2.      then return TREE-MINIMUM(right[x])
+    3.  y = parent[x]
+    4.  while y != NULL and x == right[y] 
+    5.      do x = y
+    6.      y = parent[y]
+    7.  return y
+                </pre></li>
+                <li><p>Analogicznie można wyznaczyć <strong>poprzednika</strong> danego węzła - jest to po prostu <strong>największy element, który jest mniejszy</strong> od danego węzła:</p>
+                <pre class="code">
+    TREE-PREDECESSOR(x)
+    1.  if left[x] != NULL
+    2.      then return TREE-MAXIMUM(left[x])
+    3.  y = parent[x]
+    4.  while y != NULL and x == left[y] 
+    5.      do x = y
+    6.      y = parent[y]
+    7.  return y
+                </pre></li>
+            </ul>
             </article>
             <article id="tree-walk">
                 <h2>Przeszukiwanie BST</h2>
                 <p>Własność drzewa BST umożliwia wypisanie wszystkich jego węzłów na 3 sposoby: metodą inorder, preorder lub postorder.</p>
                 <ul>
-                    <li><strong>Metoda inorder</strong> pozwala na wypisanie elementów w drzewie binarnym od węzła najdalej na lewo od węzła najdalej na prawo od korzenia.
-                        Po węzłach przechodzi zgodnie ze schematem: lewy potomek, węzeł, prawy potomek, rodzic. W ten sposób dla drzewa BST można uzyskać posortowany ciąg elementów:
-                        <pre>
-                            INORDER-TRAVERSAL(x)
-                            1.  if x != NULL then
-                            2.      INORDER-TRAVERSAL(left[x])
-                            3.      print(key[x])
-                            4.      INORDER-TRAVERSAL(right[x])
+                    <li><strong>Metoda inorder</strong> pozwala na wypisanie elementów w drzewie binarnym <strong>od węzła najdalej na lewo do węzła najdalej na prawo</strong> od korzenia.
+                        Po węzłach przechodzi zgodnie ze schematem: lewy potomek, węzeł, prawy potomek, rodzic. W ten sposób dla drzewa BST można uzyskać posortowany ciąg elementów, 
+                        co przydatne jest w przypadku algorytmów sortujących:
+                        <pre class="code">
+    INORDER-TRAVERSAL(x)
+    1.  if x != NULL then
+    2.      INORDER-TRAVERSAL(left[x])
+    3.      print(key[x])
+    4.      INORDER-TRAVERSAL(right[x])
                         </pre>
+                        <figure>
+                            <video width="400" height="400" controls>
+                                <source src="videos/inorder.mp4" type="video/mp4">
+                                <img src="images/inorder.gif" alt="inorder" class="bst-gif"/>
+                                </video> 
+                            <figcaption>Przechodzenie po drzewie BST metodą inorder</figcaption>
+                        </figure>
                     </li>
                     <li><strong>Metoda preorder</strong> pozwala na wypisanie elementów w drzewie BST od korzenia, poprzez lewych sąsiadów węzłów, do prawych sąsiadów:
-                        <pre>
-                            PREORDER-TRAVERSAL(x)
-                            1.  if x != NULL then
-                            2.      print(key[x])
-                            3.      then PREORDER-TRAVERSAL(left[x])
-                            4.      PREORDER-TRAVERSAL(right[x])
+                        <pre class="code">
+    PREORDER-TRAVERSAL(x)
+    1.  if x != NULL then
+    2.      print(key[x])
+    3.      then PREORDER-TRAVERSAL(left[x])
+    4.      PREORDER-TRAVERSAL(right[x])
                         </pre>
+                        <figure>
+                            <video width="400" height="400" controls>
+                                <source src="videos/preorder.mp4" type="video/mp4">
+                                <img src="images/preorder.gif" alt="preorder" class="bst-gif"/>
+                            </video> 
+                            <figcaption>Przechodzenie po drzewie BST metodą preorder</figcaption>
+                        </figure>
                     </li>
-                    <li><strong>Metoda postorder</strong> pozwala na wypisanie elementów w drzewie BST w kolejności od lewej do prawej 
-                        dla danej wysokości drzewa startując najwyżej i zmierzając do korzenia:
-                        <pre>
-                            POSTORDER-TRAVERSAL(x)
-                            1.  if x != NULL then
-                            2.      POSTORDER-TRAVERSAL(left[x])
-                            3.      POSTRDER-TRAVERSAL(right[x])
-                            4.      print(key[x])
+                    <li><strong>Metoda postorder</strong> pozwala na wypisanie elementów w drzewie BST od liści lewego poddrzewa poprzez liście prawego podrzewa aż do korzenia
+                        <pre class="code">
+    POSTORDER-TRAVERSAL(x)
+    1.  if x != NULL then
+    2.      POSTORDER-TRAVERSAL(left[x])
+    3.      POSTRDER-TRAVERSAL(right[x])
+    4.      print(key[x])
                         </pre>
+                    <figure>
+                        <video width="400" height="400" controls>
+                            <source src="videos/postorder.mp4" type="video/mp4">
+                            <img src="images/postorder.gif" alt="postorder" class="bst-gif"/>
+                        </video>
+                        <figcaption>Przechodzenie po drzewie BST metodą postorder</figcaption>
+                    </figure>
                     </li>
                 </ul>
                 <p>Średnia złożoność czasowa operacji przechodzenia po drzewie binarnym wynosi <i>O(n)</i>.</p>
             </article>
             <article id="nodes">
                 <h2>Dodawanie i usuwanie węzłów</h2>
-                <p>Dodawanie węzła do drzewa BST wykonywane jest zgodnie z poniższą procedurą. Do procedury tej przekazywany jest węzeł z, posiadający jako klucz key[z]:
-                    <pre>
-                        TREE-INSERT(T, z)
-                        1.  y = NULL
-                        2.  x = root[T]
-                        3.  while x != NULL
-                        4.      do y = x
-                        5.      if key[z] &lt; key[x]
-                        6.          then x = left[x]
-                        7.          else x = right[x]
-                        8.  parent[z] = y
-                        9.  if y == NULL
-                        10.     then root[T] = z
-                        11.     else if key[z] &lt; key[y]
-                        12.         then left[y] = z
-                        13.         else right[y] = z
+                <p>Dodawanie węzła do drzewa BST wykonywane jest zgodnie z poniższą procedurą. Do procedury tej przekazywany jest węzeł z, posiadający jako klucz key[z]:</p>
+                    <pre class="code">
+    TREE-INSERT(T, z)
+    1.  y = NULL
+    2.  x = root[T]
+    3.  while x != NULL
+    4.      do y = x
+    5.      if key[z] &lt; key[x]
+    6.          then x = left[x]
+    7.          else x = right[x]
+    8.  parent[z] = y
+    9.  if y == NULL
+    10.     then root[T] = z
+    11.     else if key[z] &lt; key[y]
+    12.         then left[y] = z
+    13.         else right[y] = z
                     </pre>
-                </p>
+                <p>Poniżej znajduje się animacja przedstawiająca proces wstawiania węzła do drzewa BST:</p>
+                <figure>
+                    <video width="400" height="400" controls>
+                        <source src="videos/bst_insert.mp4" type="video/mp4">
+                        <img src="images/bst_insert.gif" alt="bst_insert" class="bst-gif"/>
+                    </video>
+                    <figcaption>Wstawianie elementu do drzewa BST</figcaption>
+                </figure> 
                 <p>Trudniejszą operacją jest usunięcie węzła, ponieważ operacja ta często wiąże się z restrukturyzacją położenia węzłów.
                     W zależności od posiadanych potomków węzła z rozważamy 3 przypadki:</p>
                     <ul>
-                        <li>Jeżeli węzeł z nie posiada potomków, to w rodzicu zastępujemy wskaźnik do z wartością NULL</li>
-                        <li>Jeżeli węzeł z posiada jednego potomka, to zastępujemy węzeł z węzłem jego potomka</li>
-                        <li>Jeżeli węzeł z posiada obydwu potomków, to zastępujemy węzeł z następnikiem nie posiadającym lewego potomka</li>
+                        <li>Jeżeli węzeł z nie posiada potomków, to w rodzicu zastępujemy wskaźnik do z wartością NULL
+                            <figure>
+                                <img src="images/Binary_search_tree_delete_13.svg" alt="Binary_search_tree_delete_13.svg" class="bst-delete"/>
+                                <figcaption>Usunięcie węzła o kluczu 14 - przypadek węzła bez potomków</figcaption>
+                            </figure>
+                        </li>
+                        <li>Jeżeli węzeł z posiada jednego potomka, to zastępujemy węzeł z węzłem jego potomka
+                            <figure>
+                                <img src="images/Binary_search_tree_delete_14.svg" alt="Binary_search_tree_delete_14.svg" class="bst-delete"/>
+                                <figcaption>Usunięcie węzła o kluczu 13 - przypadek węzła posiadającego jednego potomka</figcaption>
+                            </figure>
+                        </li>
+                        <li>Jeżeli węzeł z posiada obydwu potomków, to zastępujemy węzeł z następnikiem nie posiadającym lewego potomka
+                            <figure>
+                                <img src="images/Binary_search_tree_delete_3.svg" alt="Binary_search_tree_delete_3.svg" class="bst-delete"/>
+                                <figcaption>Usunięcie węzła o kluczu 3 - przypadek węzła z obydwoma potomkami</figcaption>
+                            </figure>
+                        </li>
                     </ul>
                 <p>Całość tą można zaimplementować jak w poniższym algorytmie, gdzie węzeł y może reprezentować węzeł z lub jego następnika, 
                     kiedy węzeł z ma obydwu potomków:</p>
-                    <pre>
-                        TREE-DELETE(T, z)
-                        1.  if left[z] == NULL or right[z] == NULL
-                        2.      then y = z
-                        3.      else y = TREE-SUCCESOR(z)
-                        4.  if left[y] != NULL
-                        5.      then x = left[y]
-                        6.      else x = right[y]
-                        7.  if x != NULL
-                        8.      then parent[x] = parent[y]
-                        9.  if parent[y] == NULL
-                        10.     then root[T] = x
-                        11.     else if y == left[parent[y]]
-                        12.         then left[parent[y]] = x
+                    <pre class="code">
+    TREE-DELETE(T, z)
+    1.  if left[z] == NULL or right[z] == NULL
+    2.      then y = z
+    3.      else y = TREE-SUCCESOR(z)
+    4.  if left[y] != NULL
+    5.      then x = left[y]
+    6.      else x = right[y]
+    7.  if x != NULL
+    8.      then parent[x] = parent[y]
+    9.  if parent[y] == NULL
+    10.     then root[T] = x
+    11.     else if y == left[parent[y]]
+    12.         then left[parent[y]] = x
                     </pre>
             </article>
             <article id="simulation">
                 <h2>Symulacja</h2>
-                <p>W poniższej symulacji możesz sam utworzyć własne drzewo binarne lub wygenerować je losowo.</p>
+                <p>W poniższej symulacji możesz sam utworzyć własne drzewo binarne.</p>
+                
+                <div id="simulation-area">
+                    <div id="tree-area">
+                        <canvas id="canvas" width="1000" height="1000">
+                            Twoja przeglądarka nie wspiera canvas :(
+                        </canvas>
+                    </div>
+                    <div id="form-area">
+                    <div id="normal-menu" class="form-top">
+                    <input type="button" onclick="displaySubmenu('add-menu')" value="Dodaj węzeł" /><br/>
+                    <input type="button" onclick="displaySubmenu('remove-menu')" value="Usuń węzeł..." /><br/>
+
+                    <form name="tree-walk">
+                        <label for="traversal-select">Przejście:</label><br/>
+                        <select name="traversal" id="traversal-select">
+                            <option value="inorder" selected>Inorder</option>
+                            <option value="preorder">Preorder</option>
+                            <option value="postorder">Postorder</option>
+                        </select>
+                        <input type="button" id="traversal-button" value="Przejdź po drzewie" onclick="traverseTree()"/>
+                    </form>
+                    <p id="empty-tree-info"> </p>
+                    </div>
+                    <div id="add-menu" class="form-top" style="display: none">
+                        <form name="add-node" >
+                            <input type="button" class="return-button" onclick="returnToMainMenu('add-menu')" value="Powrót" /><br/>
+                            <label for="key">Podaj wartość:</label><br/>
+                            <input type="number" name="key" id="key" value="100" min="1" max="999"/><br/>
+                            <input type="button" onclick="addNode(false)" value="Dodaj węzeł" /><br/>
+                            <p>Podaj zakres wartości:</p>
+                            <label for="min-key">Od:</label>
+                            <input type="number" name="min-key" id="min-key" value="1" min="1" max="999"/><br/>
+                            <label for="min-key">Do:</label>
+                            <input type="number" name="max-key" id="max-key" value="200" min="1" max="999"/><br/>
+                            <input type="button" onclick="addNode(true)" value="Dodaj losowy węzeł" /><br/>
+                            <p id="add-node-info" style="color: darkred"></p>    
+                        </form>
+                    </div>
+                    <div id="remove-menu" class="form-top" style="display: none">
+                        <input type="button" class="return-button" onclick="returnToMainMenu('remove-menu')" value="Powrót" /> 
+                        <p id="remove-info">Kliknij na węzeł, aby go usunąć</p>
+                    </div>
+                    <div id="other-content">    
+                        <input type="button" id="clear-tree" onclick="clearTree()" value="Wyczyść drzewo" />
+                        <p>Liczba węzłów: <span id="number-of-nodes"></span></p>
+                        <p>Wysokość drzewa: <span id="bst-height"></span></p>
+                    </div>
+                </div>
+                </div> 
             </article>
-            <article id="other">
-                <h2>Więcej informacji</h2>
-                <p>Więcej o drzewach binarnych możesz dowiedzieć się z poniższego filmu:</p>
-            </article>
+
             <article id="about">
                 <h2>O projekcie</h2>
-                <p>Projekt ten został zrealizowany w celu zadania na przedmiot "Techniki internetowe", 5 semestr. Celem tego projektu
+                <p>Projekt ten został zrealizowany jako zadanie na przedmiot "Techniki internetowe", 5 semestr. Celem tego projektu
                     było wykorzystanie HTML, CSS i JavaScript do przedstawienia wybranego pojęcia z matematyki, fizyki lub informatyki.
                     Działanie projektu przetestowano na przeglądarkach Google Chrome oraz Firefox.
                 </p>
+                
+                <p>Żródła:</p>
+                    <ul>
+                        <li>Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest: Wprowadzenie do algorytmów. Warszawa: Wydawnictwa Naukowo-Techniczne, 2001</li>
+                        <li><a href="https://pl.wikipedia.org/wiki/Binarne_drzewo_poszukiwa%C5%84" target="_blank">https://pl.wikipedia.org/wiki/Binarne_drzewo_poszukiwa%C5%84</a></li>
+                        <li><a href="https://en.wikipedia.org/wiki/Binary_search_tree" target="_blank">https://en.wikipedia.org/wiki/Binary_search_tree</a></li>
+                    </ul>
+
+                <p>Niektóre ilustracje na tej stronie objęte są prawami autorskimi, 
+                    dlatego też projekt ten nie jest przeznaczony 
+                    do celów komercyjnych ani rozprowadzania.
+                </p>
+
+                <p>Some pictures on this site are protected by copyright laws, hence this site is not meant 
+                    for publicity or commercial use by any means.</p>
             </article>
-        </div>
-        </div>
+        </main>
+    </div>
         <footer>
-            <p>&copy; 2021 Marta Dychała</p>
+            <p>&copy; 2022 Marta Dychała</p>
         </footer>
+
+        <script src="js/main.js"></script>
     </body>
 </html>

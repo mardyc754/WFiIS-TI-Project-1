@@ -8,40 +8,73 @@ html{
 
 body{
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Raleway', sans-serif;
     min-height: 100%;
+    font-size: larger;
+    background-color: whitesmoke;
 }
 
 header, footer{
-    background-color: burlywood;
-    padding: 0.5em;
+    background-color: darkgreen;
+    padding: 0;
     min-height: 10vh;
 }
 
 header{
+    display: flex;
+    justify-content: left;
+    align-items: center;
     border-bottom: 2px solid black;
 }
 
-header h1, footer p{
+header > h1, footer > p{
     color: white;
     text-shadow: 2px 3px 2px grey;
 }
 
-nav{
-    float: left;
-    background-color: #f1f1f1;
-    width: 20%;
-    z-index: 2;
+header > h1{
+    display: inline-block;
+    margin-left: 1em;
 }
 
-nav ul{
+#menu-icon{
+    color: white;
+}
+
+#menu-icon:active{
+    background-color: transparent;
+}
+
+#menu-icon > div {
+    width: 35px;
+    height: 5px;
+    background-color: white;
+}
+
+#menu-icon:hover{
+    cursor: pointer;
+}
+
+#menu-icon > div:not(:last-child){
+    margin-bottom: 6px;
+}
+
+
+nav{
+    float: left;
+    background-color: #ddd;
+    width: 20%;
+    z-index: 2;
+    flex: 1;
+}
+
+nav > ul{
     list-style-type: none;
     position: sticky;
     left: 0;
     top: 0;
     padding: 0;
     margin: 0;
-    /*padding-top: 1em;*/
 }
 
 .link{
@@ -52,6 +85,7 @@ nav ul{
     border: none;
     text-align: left;
     transition: background-color 0.3s;
+    background-color: #ddd;
 }
 
 .link:hover{
@@ -61,22 +95,21 @@ nav ul{
 
 .flex {
     display: flex;
-    flex-wrap: nowrap;
+    flex-direction: row;
     margin-top: 0;
     min-height: 80vh;
 }  
 
-.flex::after{
-    content: "";
-    clear: both;
-    display: table;
-}
-
-.main-content{
-    width: 80%;
+main{
+    flex: 5;
     padding: 3em;
 }
 
+article > h2 {
+    text-align: center;
+    text-decoration: underline;
+    margin-bottom: 2em;
+}
 
 article{
     transition: opacity 0.7s ease-in-out;
@@ -90,6 +123,164 @@ article:active{
     height: auto;
 }
 
+figure{
+    width: 100%;
+    text-align: center;
+    margin: 4em 0;
+}
+
+#bst-example{
+    max-width: 500px;
+    width: 100%;
+}
+
+#bst-elements{
+    max-width: 900px;
+    width: 100%;
+}
+
+.bst-gif{
+    max-width: 400px;
+    width: 100%;
+}
+
+.bst-delete{
+    max-width: 600px;
+    width: 100%;
+}
+
+.code{
+    background-color: #2e2e2e;
+    color: lime;
+    border-radius: 2rem;
+    padding: 2em 0.5em;
+    font-size: large;
+}
+
+#simulation-area{
+    border: 2px solid black;
+    margin: 1em auto;
+    min-width: 400px;
+    max-width: 1000px;
+    width: 100%;
+    display: flex;
+    background-color: #eee;
+    flex-direction: row;
+    justify-self: start;
+}
+
+#tree-area{
+    flex: 3;
+}
+
 footer{
     border-top: 2px solid black;
+}
+
+#tree-area{
+    padding: 0.5em;
+}
+
+canvas{
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    background-color: white;
+}
+
+#empty-tree-info{
+    color: darkred;
+}
+
+#form-area{
+    flex: 1;
+    padding: 0.5em;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-top{
+    flex: 1;
+    width: 100%;
+    margin: 0;
+}
+
+
+input[type=number], select{
+    width: 90%;
+    padding: 10px;
+}
+
+form{
+    text-align: center;
+}
+
+input[type="button"]{
+    width: 100%;
+    padding: 10px;
+    margin: 1em 0;
+    text-align: center;
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+input[type=button]:not(.return-button){
+    background-color: mediumseagreen;
+}
+
+input[type=button]:hover{
+    cursor: pointer;
+}
+
+input[type=button]:hover:not(.return-button){
+    background-color: mediumspringgreen;
+}
+
+.return-button{
+    margin-bottom: 3em;
+    background-color: #444;
+}
+
+.return-button:hover{
+    background-color: #222;
+}
+
+
+@media screen and (max-width: 910px){
+    .flex{
+        flex-direction: column;
+    }
+    header{
+        position: sticky;
+        z-index: 2;
+        top: 0;
+    }
+    nav{
+        position: sticky;
+        top: 5.1em;
+        width: 100%;
+        flex: 0;
+    }
+    .link{
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 643px){
+    nav{
+        top: 7.2em;
+    }
+    main{
+        padding: 1em;
+    }
+}
+
+
+@media screen and (max-width: 1000px){
+    #simulation-area{
+        flex-direction: column;
+    }
 }
